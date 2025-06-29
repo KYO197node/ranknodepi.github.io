@@ -1,4 +1,6 @@
 <?php
+require_once 'config.php';
+
 // Đọc dữ liệu từ file JSON
 function loadNodeData() {
     $jsonFiles = [
@@ -36,7 +38,7 @@ function loadNodeData() {
             [
                 'public_key' => 'GAR6635PRQPUZZL6QL2HTFIMOGZW5MZ5GIJ5ZDNMQM7PFDHQQQNLSACK',
                 'last_active_date' => '2025-06-26T00:00:00.000Z',
-                'ranking' => 2
+                'rank' => 2
             ]
         ],
         'total_pages' => 1,
@@ -102,27 +104,34 @@ function getRankColor($rank) {
 function truncateKey($key) {
     return substr($key, 0, 8) . '...' . substr($key, -8);
 }
+
+function getRankIcon($rank) {
+    if ($rank <= 3) {
+        return '<i class="fas fa-trophy"></i>';
+    }
+    return '<span class="font-bold text-sm">#' . $rank . '</span>';
+}
 ?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pi Node Ranking - Kiểm tra xếp hạng Pi Node | Pi2Team</title>
-    <meta name="description" content="Kiểm tra xếp hạng Pi Node với giao diện đẹp và tính năng đầy đủ. Tìm kiếm, xem top 10 và danh sách tất cả Pi Nodes. Được phát triển bởi Pi2Team.">
+    <title><?php echo SITE_TITLE; ?></title>
+    <meta name="description" content="<?php echo SITE_DESCRIPTION; ?>">
     <meta name="keywords" content="Pi Node, Pi Network, Node Ranking, Pi2Team, Blockchain, Cryptocurrency">
-    <meta name="author" content="Pi2Team">
+    <meta name="author" content="<?php echo TEAM_NAME; ?>">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Pi Node Ranking - Kiểm tra xếp hạng Pi Node | Pi2Team">
-    <meta property="og:description" content="Kiểm tra xếp hạng Pi Node với giao diện đẹp và tính năng đầy đủ. Được phát triển bởi Pi2Team.">
+    <meta property="og:title" content="<?php echo SITE_TITLE; ?>">
+    <meta property="og:description" content="<?php echo SITE_DESCRIPTION; ?>">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Pi2Team">
+    <meta property="og:site_name" content="<?php echo TEAM_NAME; ?>">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Pi Node Ranking - Pi2Team">
+    <meta name="twitter:title" content="Pi Node Ranking - <?php echo TEAM_NAME; ?>">
     <meta name="twitter:description" content="Kiểm tra xếp hạng Pi Node với giao diện đẹp và tính năng đầy đủ.">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -163,10 +172,10 @@ function truncateKey($key) {
                     <i class="fas fa-star text-white text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-white">Pi Node Ranking</h1>
+                    <h1 class="text-2xl font-bold text-white"><?php echo APP_NAME; ?></h1>
                     <div class="flex items-center space-x-2">
                         <p class="text-sm text-gray-400">Kiểm tra xếp hạng Pi Node</p>
-                        <span class="text-xs text-purple-400 font-medium">by Pi2Team</span>
+                        <span class="text-xs text-purple-400 font-medium">by <?php echo TEAM_NAME; ?></span>
                         <i class="fas fa-file-alt text-blue-400" title="Static data"></i>
                         <i class="fas fa-database text-green-400" title="<?php echo number_format($totalNodes); ?> nodes loaded"></i>
                     </div>
@@ -213,7 +222,7 @@ function truncateKey($key) {
                     <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
                         <i class="fas fa-code text-white"></i>
                     </div>
-                    <div class="text-3xl font-bold text-white mb-2">Pi2Team</div>
+                    <div class="text-3xl font-bold text-white mb-2"><?php echo TEAM_NAME; ?></div>
                     <div class="text-gray-400 text-sm">Phát triển bởi</div>
                     <div class="text-gray-500 text-xs mt-1">Hosting PHP</div>
                 </div>
@@ -230,7 +239,7 @@ function truncateKey($key) {
                     Nhập Public Key để kiểm tra xếp hạng và thông tin hoạt động của Pi Node
                 </p>
                 <p class="text-sm text-gray-400 mt-2">
-                    Tìm kiếm trong <?php echo number_format($totalNodes); ?> nodes • Phát triển bởi <span class="text-purple-400 font-medium">Pi2Team</span>
+                    Tìm kiếm trong <?php echo number_format($totalNodes); ?> nodes • Phát triển bởi <span class="text-purple-400 font-medium"><?php echo TEAM_NAME; ?></span>
                 </p>
             </div>
             
@@ -282,11 +291,7 @@ function truncateKey($key) {
                 <div class="max-w-2xl mx-auto">
                     <div class="group relative p-6 rounded-2xl backdrop-blur-sm border bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/50 shadow-lg shadow-purple-500/10">
                         <div class="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-r <?php echo getRankColor($rank); ?> rounded-full flex items-center justify-center text-white shadow-lg">
-                            <?php if ($rank <= 3): ?>
-                                <i class="fas fa-trophy"></i>
-                            <?php else: ?>
-                                <span class="font-bold text-sm">#<?php echo $rank; ?></span>
-                            <?php endif; ?>
+                            <?php echo getRankIcon($rank); ?>
                         </div>
 
                         <div class="mt-4 mb-4">
@@ -353,7 +358,7 @@ function truncateKey($key) {
                         Danh sách các Pi Node có xếp hạng cao nhất
                     </p>
                     <p class="text-sm text-gray-400 mt-2">
-                        Từ tổng số <?php echo number_format($totalNodes); ?> nodes • Phát triển bởi <span class="text-purple-400 font-medium">Pi2Team</span>
+                        Từ tổng số <?php echo number_format($totalNodes); ?> nodes • Phát triển bởi <span class="text-purple-400 font-medium"><?php echo TEAM_NAME; ?></span>
                     </p>
                 </div>
 
@@ -364,11 +369,7 @@ function truncateKey($key) {
                         ?>
                         <div class="group relative p-6 rounded-2xl backdrop-blur-sm border bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-[1.02]">
                             <div class="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-r <?php echo getRankColor($rank); ?> rounded-full flex items-center justify-center text-white shadow-lg">
-                                <?php if ($rank <= 3): ?>
-                                    <i class="fas fa-trophy"></i>
-                                <?php else: ?>
-                                    <span class="font-bold text-sm">#<?php echo $rank; ?></span>
-                                <?php endif; ?>
+                                <?php echo getRankIcon($rank); ?>
                             </div>
 
                             <div class="mt-4 mb-4">
@@ -403,7 +404,7 @@ function truncateKey($key) {
                         <span>•</span>
                         <span>20 nodes/trang</span>
                         <span>•</span>
-                        <span class="text-purple-400 font-medium">Pi2Team</span>
+                        <span class="text-purple-400 font-medium"><?php echo TEAM_NAME; ?></span>
                     </div>
                 </div>
 
@@ -414,11 +415,7 @@ function truncateKey($key) {
                         ?>
                         <div class="group relative p-6 rounded-2xl backdrop-blur-sm border bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-[1.02]">
                             <div class="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-r <?php echo getRankColor($rank); ?> rounded-full flex items-center justify-center text-white shadow-lg">
-                                <?php if ($rank <= 3): ?>
-                                    <i class="fas fa-trophy"></i>
-                                <?php else: ?>
-                                    <span class="font-bold text-sm">#<?php echo $rank; ?></span>
-                                <?php endif; ?>
+                                <?php echo getRankIcon($rank); ?>
                             </div>
 
                             <div class="mt-4 mb-4">
@@ -543,11 +540,13 @@ function truncateKey($key) {
                     <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
                         <i class="fas fa-star text-white"></i>
                     </div>
-                    <span class="text-xl font-bold text-white">Pi Node Ranking</span>
-                    <span class="text-sm text-purple-400 font-medium">by Pi2Team</span>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xl font-bold text-white"><?php echo APP_NAME; ?></span>
+                        <span class="text-sm text-purple-400 font-medium">by <?php echo TEAM_NAME; ?></span>
+                    </div>
                 </div>
                 <div class="text-gray-400 text-sm text-center md:text-right">
-                    <div>© 2025 Pi2Team. All rights reserved.</div>
+                    <div>© 2025 <?php echo TEAM_NAME; ?>. All rights reserved.</div>
                     <div class="mt-1">
                         Ứng dụng PHP • <?php echo number_format($totalNodes); ?> nodes • 20 nodes/trang
                     </div>
