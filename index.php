@@ -17,7 +17,7 @@ function loadNodeData() {
             if ($data && isset($data['xếp hạng']) && is_array($data['xếp hạng'])) {
                 return $data;
             } elseif (is_array($data)) {
-                // Nếu là array trực tiếp
+                // Nếu là array trực tiếp (như file JSON của user)
                 return [
                     'xếp hạng' => $data,
                     'total_pages' => ceil(count($data) / 20),
@@ -33,12 +33,12 @@ function loadNodeData() {
             [
                 'public_key' => 'GD3TEKP5DUPS4C2NKZD44HNVLTXJML64JSMQF537XEZDVQPVWNFUT7A4',
                 'last_active_date' => '2025-06-26T00:00:00.000Z',
-                'rank' => 1
+                'ranking' => 1
             ],
             [
                 'public_key' => 'GAR6635PRQPUZZL6QL2HTFIMOGZW5MZ5GIJ5ZDNMQM7PFDHQQQNLSACK',
                 'last_active_date' => '2025-06-26T00:00:00.000Z',
-                'rank' => 2
+                'ranking' => 2
             ]
         ],
         'total_pages' => 1,
@@ -72,7 +72,7 @@ $searchResult = null;
 if (!empty($search)) {
     $foundNode = searchNode($nodes, $search);
     $searchResult = [
-        'node' => $foundNode ?: ['public_key' => $search, 'last_active_date' => '', 'rank' => 0],
+        'node' => $foundNode ?: ['public_key' => $search, 'last_active_date' => '', 'ranking' => 0],
         'found' => $foundNode !== null
     ];
 }
