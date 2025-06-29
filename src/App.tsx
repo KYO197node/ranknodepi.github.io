@@ -7,13 +7,15 @@ import {
   AlertCircle,
   CheckCircle,
   Database,
-  FileText
+  FileText,
+  List
 } from 'lucide-react';
 import { SearchBar } from './components/SearchBar';
 import { RankingCard } from './components/RankingCard';
 import { StatsCard } from './components/StatsCard';
 import { RefreshButton } from './components/RefreshButton';
 import { ErrorBanner } from './components/ErrorBanner';
+import { NodeList } from './components/NodeList';
 import { useRankingData } from './hooks/useRankingData';
 import { apiService } from './services/apiService';
 import { NodeRanking, SearchResult } from './types';
@@ -22,7 +24,7 @@ function App() {
   const [isVisible, setIsVisible] = useState(false);
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [isSearching, setIsSearching] = useState(false);
-  const [showTopRankings, setShowTopRankings] = useState(true);
+  const [currentView, setCurrentView] = useState<'top10' | 'all'>('top10');
   const [showError, setShowError] = useState(true);
   
   const { data: rankingData, loading, error, lastUpdated, refetch } = useRankingData();
@@ -39,13 +41,13 @@ function App() {
       
       if (foundNode) {
         setSearchResult({ node: foundNode, found: true });
-        setShowTopRankings(false);
+        setCurrentView('top10'); // Reset to top10 view when searching
       } else {
         setSearchResult({ 
           node: { public_key: query, last_active_date: '', rank: 0 }, 
           found: false 
         });
-        setShowTopRankings(false);
+        setCurrentView('top10');
       }
     } catch (err) {
       console.error('Search error:', err);
@@ -53,7 +55,7 @@ function App() {
         node: { public_key: query, last_active_date: '', rank: 0 }, 
         found: false 
       });
-      setShowTopRankings(false);
+      setCurrentView('top10');
     }
     
     setIsSearching(false);
@@ -61,7 +63,6 @@ function App() {
 
   const handleClearSearch = () => {
     setSearchResult(null);
-    setShowTopRankings(true);
   };
 
   const formatLastUpdated = (dateString: string) => {
@@ -75,6 +76,7 @@ function App() {
   };
 
   const topNodes = rankingData["xếp hạng"].slice(0, 10);
+  const allNodes = rankingData["xếp hạng"];
   const cacheStatus = apiService.getCacheStatus();
 
   return (
@@ -136,7 +138,7 @@ function App() {
             />
             <StatsCard 
               icon={TrendingUp} 
-              value={rankingData.total_pages.toLocaleString()} 
+              value={Math.ceil(rankingData["xếp hạng"].length / 20).toLocaleString()} 
               label="Tổng số trang" 
               gradient="from-blue-500 to-cyan-500"
               subtitle="20 nodes/trang"
@@ -214,36 +216,79 @@ function App() {
           </div>
         )}
 
-        {/* Top Rankings */}
-        {showTopRankings && (
-          <div className={`transform transition-all duration-1000 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <div className="text-center mb-12">
-              <h3 className="text-4xl font-bold text-white mb-4">
-                Top <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">10</span> Pi Nodes
-              </h3>
-              <p className="text-xl text-gray-300">
-                Danh sách các Pi Node có xếp hạng cao nhất
-              </p>
-              <p className="text-sm text-gray-400 mt-2">
-                Từ tổng số {rankingData["xếp hạng"].length.toLocaleString()} nodes trong dữ liệu tĩnh
-              </p>
-              {loading && (
-                <div className="mt-4 flex items-center justify-center space-x-2 text-purple-400">
-                  <div className="w-4 h-4 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
-                  <span>Đang tải dữ liệu tĩnh...</span>
-                </div>
-              )}
+        {/* View Toggle */}
+        {!searchResult && (
+          <div className={`mb-8 transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className="flex justify-center">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-2 flex space-x-2">
+                <button
+                  onClick={() => setCurrentView('top10')}
+                  className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
+                    currentView === 'top10'
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                      : 'text-gray-400 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <TrendingUp className="w-4 h-4" />
+                  <span>Top 10</span>
+                </button>
+                <button
+                  onClick={() => setCurrentView('all')}
+                  className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
+                    currentView === 'all'
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                      : 'text-gray-400 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                  <span>Tất cả ({allNodes.length.toLocaleString()})</span>
+                </button>
+              </div>
             </div>
+          </div>
+        )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {topNodes.map((node, index) => (
-                <RankingCard 
-                  key={node.public_key} 
-                  node={node} 
-                  index={index}
-                />
-              ))}
-            </div>
+        {/* Content based on current view */}
+        {!searchResult && (
+          <div className={`transform transition-all duration-1000 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            {currentView === 'top10' ? (
+              <div>
+                <div className="text-center mb-12">
+                  <h3 className="text-4xl font-bold text-white mb-4">
+                    Top <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">10</span> Pi Nodes
+                  </h3>
+                  <p className="text-xl text-gray-300">
+                    Danh sách các Pi Node có xếp hạng cao nhất
+                  </p>
+                  <p className="text-sm text-gray-400 mt-2">
+                    Từ tổng số {rankingData["xếp hạng"].length.toLocaleString()} nodes trong dữ liệu tĩnh
+                  </p>
+                  {loading && (
+                    <div className="mt-4 flex items-center justify-center space-x-2 text-purple-400">
+                      <div className="w-4 h-4 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+                      <span>Đang tải dữ liệu tĩnh...</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {topNodes.map((node, index) => (
+                    <RankingCard 
+                      key={node.public_key} 
+                      node={node} 
+                      index={index}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <NodeList
+                nodes={allNodes}
+                title="Danh sách tất cả Pi Nodes"
+                subtitle="Xem toàn bộ danh sách nodes với phân trang 20 nodes/trang"
+                showPagination={true}
+              />
+            )}
           </div>
         )}
       </div>
@@ -261,7 +306,7 @@ function App() {
             <div className="text-gray-400 text-sm text-center md:text-right">
               <div>© 2025 Pi Node Ranking. All rights reserved.</div>
               <div className="mt-1">
-                Dữ liệu tĩnh từ file JSON • {rankingData["xếp hạng"].length.toLocaleString()} nodes • Cập nhật thủ công
+                Dữ liệu tĩnh từ file JSON • {rankingData["xếp hạng"].length.toLocaleString()} nodes • 20 nodes/trang
               </div>
             </div>
           </div>
