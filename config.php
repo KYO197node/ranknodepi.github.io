@@ -1,5 +1,11 @@
 <?php
-// Configuration file for Pi Node Ranking
+// Configuration file for Pi Node Ranking - Developed by Pi2Team
+
+// Application info
+define('APP_NAME', 'Pi Node Ranking');
+define('APP_VERSION', '1.0.0');
+define('APP_AUTHOR', 'Pi2Team');
+define('APP_DESCRIPTION', 'Kiểm tra xếp hạng Pi Node với giao diện đẹp và tính năng đầy đủ');
 
 // Database settings (if you want to use database later)
 define('DB_HOST', 'localhost');
@@ -24,9 +30,15 @@ define('ENABLE_RATE_LIMIT', false);
 define('MAX_REQUESTS_PER_MINUTE', 60);
 
 // Display settings
-define('SITE_TITLE', 'Pi Node Ranking');
-define('SITE_DESCRIPTION', 'Kiểm tra xếp hạng Pi Node');
+define('SITE_TITLE', 'Pi Node Ranking - Pi2Team');
+define('SITE_DESCRIPTION', 'Kiểm tra xếp hạng Pi Node - Phát triển bởi Pi2Team');
 define('DEFAULT_TIMEZONE', 'Asia/Ho_Chi_Minh');
+
+// Pi2Team branding
+define('TEAM_NAME', 'Pi2Team');
+define('TEAM_WEBSITE', '#'); // Update when available
+define('TEAM_EMAIL', '#'); // Update when available
+define('TEAM_TELEGRAM', '#'); // Update when available
 
 // Set timezone
 date_default_timezone_set(DEFAULT_TIMEZONE);
@@ -51,5 +63,24 @@ function sanitizeInput($input) {
 function isValidPublicKey($key) {
     // Basic validation for Stellar public key format
     return preg_match('/^G[A-Z0-9]{55}$/', $key);
+}
+
+// Pi2Team branding functions
+function getTeamInfo() {
+    return [
+        'name' => TEAM_NAME,
+        'website' => TEAM_WEBSITE,
+        'email' => TEAM_EMAIL,
+        'telegram' => TEAM_TELEGRAM
+    ];
+}
+
+function getAppInfo() {
+    return [
+        'name' => APP_NAME,
+        'version' => APP_VERSION,
+        'author' => APP_AUTHOR,
+        'description' => APP_DESCRIPTION
+    ];
 }
 ?>

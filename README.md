@@ -1,8 +1,12 @@
-# Pi Node Ranking - PHP Version
+# Pi Node Ranking - PHP Version by Pi2Team
 
-Ứng dụng PHP để kiểm tra xếp hạng Pi Node với giao diện đẹp và tính năng đầy đủ.
+Ứng dụng PHP để kiểm tra xếp hạng Pi Node với giao diện đẹp và tính năng đầy đủ. Được phát triển bởi **Pi2Team**.
 
-## Tính năng
+## 👥 Về Pi2Team
+
+**Pi2Team** là nhóm phát triển chuyên về các ứng dụng liên quan đến Pi Network và blockchain. Chúng tôi cam kết tạo ra những công cụ hữu ích và dễ sử dụng cho cộng đồng Pi Network.
+
+## ✨ Tính năng
 
 - ✅ Hiển thị danh sách Top 10 Pi Nodes
 - ✅ Xem tất cả nodes với phân trang (20 nodes/trang)
@@ -10,29 +14,34 @@
 - ✅ Copy Public Key vào clipboard
 - ✅ Giao diện responsive, đẹp mắt
 - ✅ Hoạt động trên hosting PHP
+- ✅ SEO friendly với meta tags đầy đủ
+- ✅ Branding Pi2Team
 
-## Cài đặt
+## 🚀 Cài đặt
 
-1. **Upload files lên hosting:**
-   - Upload tất cả files vào thư mục public_html hoặc www
-   - Đảm bảo file `index.php` ở thư mục gốc
-   - Tạo thư mục `data/` và upload file `nodes_ranking.json`
+### 1. Upload files lên hosting:
+Upload tất cả files vào thư mục public_html hoặc www:
+- Đảm bảo file `index.php` ở thư mục gốc
+- Tạo thư mục `data/` và upload file `nodes_ranking.json`
 
-2. **Cấu trúc thư mục:**
-   ```
-   /
-   ├── index.php              # File chính
-   ├── data/
-   │   └── nodes_ranking.json # Dữ liệu nodes
-   └── README.md
-   ```
+### 2. Cấu trúc thư mục:
+```
+/
+├── index.php              # File chính
+├── config.php             # Cấu hình
+├── .htaccess             # Cấu hình Apache
+├── data/
+│   └── nodes_ranking.json # Dữ liệu nodes
+└── README.md             # Hướng dẫn
+```
 
-3. **Yêu cầu hosting:**
-   - PHP 7.0 trở lên
-   - Hỗ trợ file_get_contents()
-   - Hỗ trợ JSON functions
+### 3. Yêu cầu hosting:
+- PHP 7.0 trở lên
+- Apache với mod_rewrite
+- Hỗ trợ file_get_contents()
+- Hỗ trợ JSON functions
 
-## Cập nhật dữ liệu
+## 📊 Cập nhật dữ liệu
 
 Để cập nhật danh sách nodes:
 
@@ -53,12 +62,13 @@
    }
    ```
 
-## Tính năng chính
+## 🎯 Tính năng chính
 
 ### 1. Trang chủ
 - Hiển thị thống kê tổng quan
 - Top 10 nodes hàng đầu
 - Tìm kiếm nhanh
+- Branding Pi2Team
 
 ### 2. Tìm kiếm
 - Tìm kiếm chính xác theo Public Key
@@ -75,8 +85,9 @@
 - Dark theme với gradient đẹp mắt
 - Animations và hover effects
 - Copy to clipboard
+- SEO optimized
 
-## Customization
+## ⚙️ Customization
 
 ### Thay đổi số nodes/trang
 Sửa biến `$itemsPerPage` trong `index.php`:
@@ -92,7 +103,7 @@ Chỉnh sửa các class Tailwind CSS trong file `index.php`
 - Tích hợp database
 - Thêm authentication
 
-## Hỗ trợ
+## 🔧 Hỗ trợ
 
 Nếu gặp vấn đề:
 1. Kiểm tra PHP version >= 7.0
@@ -100,6 +111,16 @@ Nếu gặp vấn đề:
 3. Kiểm tra quyền đọc file trên hosting
 4. Xem PHP error logs
 
-## License
+## 📞 Liên hệ Pi2Team
+
+- **Website**: [Đang cập nhật]
+- **Email**: [Đang cập nhật]
+- **Telegram**: [Đang cập nhật]
+
+## 📄 License
 
 MIT License - Sử dụng tự do cho mục đích cá nhân và thương mại.
+
+---
+
+**Phát triển bởi Pi2Team** - Chuyên gia về Pi Network và Blockchain Applications
